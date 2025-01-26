@@ -1,18 +1,16 @@
 import express from 'express';
+import { signin,signup ,logout,updateProfile} from '../controllers/auth.controller.js';
+import { isLoggedIn } from '../middlewares/isLoggedIn.middlewares.js';
+
 
 const router = express.Router();
 
-router.get('/api/login',(req,res)=>{
-    res.send("sigin Route");
-})
+router.post('/api/login',signin)
+router.post('/api/signup',signup)
+router.get('/api/logout',logout)
 
 
-router.get('/api/signup',(req,res)=>{
-    res.send("Signup Route");
-})
+router.put('/update-profilePic',isLoggedIn,updateProfile);
 
-router.get('/api/logout',(req,res)=>{
-    res.send("Logout Route");
-})
 
 export default router;
