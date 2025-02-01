@@ -1,4 +1,5 @@
 
+import cloudinary from '../lib/cloudinary.js';
 import {User as UserModel} from '../models/user.model.js';
 
 
@@ -73,6 +74,43 @@ export const logout = (req,res)=>{
 }
 
 
-export const updateProfile = (req,res)=>{
+export const updateProfile = async(req,res)=>{
 
+    try {
+        const {profilePic} = req.body;
+        const userID = req.user._id;
+
+        if(!profilePic)
+        {
+            return res.status(400).json({message:"Profile Pic is required"});
+        }
+
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
+
+        const updateUser = await UserModel.findByIdAndUpdate(
+            userID,
+            {profilePic:uploadResponse.secure_url},
+            {new:true}
+        )
+
+        
+    } catch (error) {
+
+        console.log("Error in Uploading profile controller",message.error);
+        return res.status(500).json({message:"Ineternal Server Error"});
+        
+    }
+}
+
+export const checkAuth = (req,res)=>{
+    try {
+
+        res.status(200).json(req.user)
+        
+    } catch (error) {
+
+        console.log("Error in Check Auth controller",message);
+        return res.ststus(500).json({message:"Internal Server Error"});
+        
+    }
 }
