@@ -7,12 +7,12 @@ const router = express.Router();
 
 router.post('/login',signin)
 router.post('/signup',signup)
-router.get('/logout',logout)
+router.post('/logout',logout)
 
 
-router.put('/update-profilePic',isLoggedIn,updateProfile);
+router.put('/update-profile',isLoggedIn,updateProfile);
 
-router.get('/check-auth',isLoggedIn,checkAuth);
+router.get('/check',isLoggedIn,checkAuth);
 
 
 
