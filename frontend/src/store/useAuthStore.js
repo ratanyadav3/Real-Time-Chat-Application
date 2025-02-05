@@ -51,7 +51,7 @@ export const useAuthStore = create((set, get) => ({
 
       get().connectSocket();
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response.data);
     } finally {
       set({ isLoggingIn: false });
     }
@@ -70,38 +70,21 @@ export const useAuthStore = create((set, get) => ({
 
 
 
+ 
   updateProfile: async (data) => {
     set({ isUpdatingProfile: true });
     try {
       const res = await axiosInstance.put("/auth/update-profile", data);
-      console.log("Updated Profile Response:", res.data); // Debugging ke liye
-  
-      set((state) => ({
-        authUser: { ...state.authUser, ...res.data }
-      }));
-  
+      console.log(`data come after updating ${res.data}`);
+      set({ authUser: res.data });
       toast.success("Profile updated successfully");
     } catch (error) {
       console.log("error in update profile:", error);
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response.data.message);
     } finally {
       set({ isUpdatingProfile: false });
     }
-  },  
-  // updateProfile: async (data) => {
-  //   set({ isUpdatingProfile: true });
-  //   try {
-  //     const res = await axiosInstance.put("/auth/update-profile", data);
-  //     console.log(`data come after updating ${res.data}`);
-  //     set({ authUser: res.data });
-  //     toast.success("Profile updated successfully");
-  //   } catch (error) {
-  //     console.log("error in update profile:", error);
-  //     toast.error(error.response.data.message);
-  //   } finally {
-  //     set({ isUpdatingProfile: false });
-  //   }
-  // },
+  },
 
   connectSocket: () => {
     const { authUser } = get();
